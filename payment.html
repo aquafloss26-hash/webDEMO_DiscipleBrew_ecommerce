@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciple Brew | Secure Checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #2d5a27;
+            --secondary-green: #3c7643;
+            --accent-gold: #d4a96c;
+            --light-beige: #f5f1e8;
+            --medium-beige: #e8dfd0;
+            --dark-brown: #3e3a34;
+            --text-dark: #2a2620;
+            --text-light: #5a5347;
+            --white: #ffffff;
+            --shadow: rgba(45, 90, 39, 0.08);
+            --shadow-hover: rgba(45, 90, 39, 0.15);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --container-padding: 5%;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--light-beige);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+        }
+        
+        h2 {
+            font-size: 2.8rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-gold);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+        }
+        
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2:after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px var(--shadow-hover);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(45, 90, 39, 0.05);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-gold);
+            color: var(--dark-brown);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e0b87c;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-full {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px var(--container-padding);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            height: 65px;
+            width: auto;
+            border-radius: 8px;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-tagline {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: -3px;
+            font-style: italic;
+        }
+        
+        .nav-cart-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary-green);
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: var(--transition);
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-green);
+            cursor: pointer;
+        }
+        
+        /* Payment Section */
+        .payment {
+            background-color: var(--white);
+            min-height: calc(100vh - 200px);
+            padding-top: 150px;
+        }
+        
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .order-summary {
+            background-color: var(--light-beige);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+        
+        .order-summary h3 {
+            color: var(--primary-green);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--medium-beige);
+        }
+        
+        .order-items {
+            margin-bottom: 30px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--medium-beige);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-name {
+            font-weight: 500;
+        }
+        
+        .item-quantity {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .item-price {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+        
+        .order-totals {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--medium-beige);
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .total-row.grand-total {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--medium-beige);
+        }
+        
+        .payment-options {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+        
+        .payment-options h3 {
+            color: var(--primary-green);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--medium-beige);
+        }
+        
+        .payment-method {
+            margin-bottom: 30px;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--light-beige);
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .payment-option:hover {
+            background-color: var(--medium-beige);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .payment-option.selected {
+            border-color: var(--primary-green);
+            background-color: rgba(45, 90, 39, 0.05);
+        }
+        
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.8rem;
+            color: var(--primary-green);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .payment-details {
+            flex: 1;
+        }
+        
+        .payment-details h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        
+        .payment-details p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        
+        .payment-form {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--medium-beige);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .security-notice {
+            background-color: var(--light-beige);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .security-notice i {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+        }
+        
+        .security-notice p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+        
+        .order-note {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--light-beige);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-brown);
+            color: var(--white);
+            padding: 60px 0 30px;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo .logo-text {
+            color: var(--white);
+        }
+        
+        .footer-logo .logo-tagline {
+            color: var(--medium-beige);
+        }
+        
+        .footer-about p {
+            color: var(--medium-beige);
+        }
+        
+        .footer-links h4, .footer-contact h4 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--medium-beige);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+        
+        .footer-contact p {
+            color: var(--medium-beige);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .footer-contact i {
+            color: var(--accent-gold);
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--accent-gold);
+            color: var(--dark-brown);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--medium-beige);
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            padding: 50px;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.5s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+        
+        .modal-content h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2.4rem;
+            }
+            
+            .payment-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .payment {
+                padding-top: 130px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px var(--container-padding);
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .nav-cart-container {
+                gap: 1.5rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .payment {
+                padding-top: 120px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-summary, .payment-options {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            :root {
+                --container-padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                gap: 10px;
+            }
+            
+            .logo-img {
+                height: 50px;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .payment {
+                padding-top: 110px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Logo styling */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* QR Code */
+        .qr-code-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: var(--light-beige);
+            border-radius: var(--border-radius);
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--text-light);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .gcash-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="header-container container">
+<a href="index.html" class="logo">
+    <!-- Your Actual Logo -->
+    <div class="logo-container">
+        <img src="images/db.png" alt="Disciple Brew" class="logo-img" style="height: 65px; width: auto; border-radius: 8px;">
+        <div>
+            <div class="logo-text">Disciple Brew</div>
+            <div class="logo-tagline">Pressed but not crushed</div>
+        </div>
+    </div>
+</a>
+            
+            <div class="nav-cart-container">
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#menu">Menu</a></li>
+                        <li><a href="index.html#events">Events</a></li>
+                        <li><a href="index.html#location">Location</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Section -->
+    <section class="payment" id="payment">
+        <div class="container">
+            <div class="section-title">
+                <h2>Secure Checkout</h2>
+                <p class="fade-in">Complete your order with our secure payment options</p>
+            </div>
+            
+            <div class="payment-container fade-in">
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h3>Your Order</h3>
+                    
+                    <div class="order-items" id="orderItems">
+                        <!-- Order items will be populated from localStorage -->
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">Bangus Sinigang</div>
+                                <div class="item-quantity">2 × ₱320</div>
+                            </div>
+                            <div class="item-price">₱640</div>
+                        </div>
+                        
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">Creamy Pasta</div>
+                                <div class="item-quantity">1 × ₱290</div>
+                            </div>
+                            <div class="item-price">₱290</div>
+                        </div>
+                        
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">BLT Sandwich</div>
+                                <div class="item-quantity">1 × ₱220</div>
+                            </div>
+                            <div class="item-price">₱220</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">₱1,150</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Service Fee</span>
+                            <span>₱50</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery Fee</span>
+                            <span>₱100</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total Amount</span>
+                            <span id="grandTotal">₱1,300</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-note">
+                        <p><i class="fas fa-info-circle" style="margin-right: 8px; color: var(--accent-gold);"></i> Your order will be prepared upon successful payment. Estimated preparation time: 15-20 minutes.</p>
+                    </div>
+                </div>
+                
+                <!-- Payment Options -->
+                <div class="payment-options">
+                    <h3>Select Payment Method</h3>
+                    
+                    <!-- GCash -->
+                    <div class="payment-option selected" id="gcashOption">
+                        <div class="payment-icon" style="background-color: #0047AB; color: white;">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h4>GCash</h4>
+                            <p>Pay instantly using your GCash wallet</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="fas fa-check-circle" style="color: var(--primary-green); font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- PayPal -->
+                    <div class="payment-option" id="paypalOption">
+                        <div class="payment-icon" style="background-color: #003087; color: white;">
+                            <i class="fab fa-paypal"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h4>PayPal</h4>
+                            <p>Pay using PayPal account or credit card</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle" style="color: var(--text-light); font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- PayMaya -->
+                    <div class="payment-option" id="paymayaOption">
+                        <div class="payment-icon" style="background-color: #00A859; color: white;">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h4>PayMaya</h4>
+                            <p>Pay using your PayMaya account</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle" style="color: var(--text-light); font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit Card -->
+                    <div class="payment-option" id="creditCardOption">
+                        <div class="payment-icon" style="background-color: #1a1a1a; color: white;">
+                            <i class="far fa-credit-card"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h4>Credit/Debit Card</h4>
+                            <p>Pay with Visa, Mastercard, or American Express</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle" style="color: var(--text-light); font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Bank Transfer -->
+                    <div class="payment-option" id="bankTransferOption">
+                        <div class="payment-icon" style="background-color: #2d5a27; color: white;">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h4>Bank Transfer</h4>
+                            <p>Transfer payment directly to our bank account</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle" style="color: var(--text-light); font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- GCash Payment Form (Visible by default) -->
+                    <div class="payment-form" id="gcashForm">
+                        <div class="qr-code-container">
+                            <h4 style="margin-bottom: 15px;">Scan to Pay with GCash</h4>
+                            <div class="qr-code">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 4rem; color: var(--text-light); margin-bottom: 10px;">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <div>GCash QR Code</div>
+                                </div>
+                            </div>
+                            <p class="gcash-number">GCash Number: 0998 841 9852</p>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">Scan the QR code or send payment to our GCash number</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gcashNumber">Your GCash Number</label>
+                            <input type="text" id="gcashNumber" class="form-control" placeholder="09XX XXX XXXX" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gcashReference">GCash Reference Number</label>
+                            <input type="text" id="gcashReference" class="form-control" placeholder="Enter transaction reference number" required>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-full" id="confirmGcashPayment">
+                            <i class="fas fa-check-circle"></i> Confirm GCash Payment
+                        </button>
+                    </div>
+                    
+                    <!-- PayPal Payment Form (Hidden by default) -->
+                    <div class="payment-form" id="paypalForm" style="display: none;">
+                        <p>You will be redirected to PayPal to complete your payment securely.</p>
+                        <div class="form-group">
+                            <label for="paypalEmail">PayPal Email</label>
+                            <input type="email" id="paypalEmail" class="form-control" placeholder="your.email@example.com" required>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-full" id="confirmPaypalPayment">
+                            <i class="fab fa-paypal"></i> Proceed to PayPal
+                        </button>
+                    </div>
+                    
+                    <!-- PayMaya Payment Form (Hidden by default) -->
+                    <div class="payment-form" id="paymayaForm" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymayaNumber">PayMaya Number</label>
+                                <input type="text" id="paymayaNumber" class="form-control" placeholder="09XX XXX XXXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymayaOTP">OTP</label>
+                                <input type="text" id="paymayaOTP" class="form-control" placeholder="Enter OTP" required>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-full" id="confirmPaymayaPayment">
+                            <i class="fas fa-credit-card"></i> Confirm PayMaya Payment
+                        </button>
+                    </div>
+                    
+                    <!-- Credit Card Payment Form (Hidden by default) -->
+                    <div class="payment-form" id="creditCardForm" style="display: none;">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date</label>
+                                <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" class="form-control" placeholder="123" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardName">Name on Card</label>
+                            <input type="text" id="cardName" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-full" id="confirmCreditCardPayment">
+                            <i class="far fa-credit-card"></i> Confirm Card Payment
+                        </button>
+                    </div>
+                    
+                    <!-- Bank Transfer Form (Hidden by default) -->
+                    <div class="payment-form" id="bankTransferForm" style="display: none;">
+                        <div class="bank-details" style="background-color: var(--light-beige); padding: 20px; border-radius: var(--border-radius); margin-bottom: 25px;">
+                            <h4 style="margin-bottom: 15px; color: var(--primary-green);">Bank Account Details</h4>
+                            <p style="margin-bottom: 8px;"><strong>Bank:</strong> Bank of the Philippine Islands (BPI)</p>
+                            <p style="margin-bottom: 8px;"><strong>Account Name:</strong> Disciple Brew Coffee Shop</p>
+                            <p style="margin-bottom: 8px;"><strong>Account Number:</strong> 1234 5678 9012</p>
+                            <p><strong>Swift Code:</strong> BOPIPHMM</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bankName">Your Bank Name</label>
+                            <input type="text" id="bankName" class="form-control" placeholder="e.g., BDO, Metrobank, etc." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="referenceNumber">Transfer Reference Number</label>
+                            <input type="text" id="referenceNumber" class="form-control" placeholder="Enter transaction reference number" required>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-full" id="confirmBankTransfer">
+                            <i class="fas fa-university"></i> Confirm Bank Transfer
+                        </button>
+                    </div>
+                    
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>All payments are secured with 256-bit SSL encryption. We never store your payment details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Payment Successful!</h3>
+            <p id="modalMessage">Your order has been confirmed and is being prepared.</p>
+            <div style="margin-top: 30px;">
+                <p><strong>Order ID:</strong> <span id="orderId">DB-2023-00145</span></p>
+                <p><strong>Estimated Ready Time:</strong> <span id="readyTime">15-20 minutes</span></p>
+            </div>
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Return Home
+                </a>
+                <button class="btn btn-accent" id="viewOrderDetails">
+                    <i class="fas fa-receipt"></i> View Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+<a href="index.html" class="logo">
+    <!-- Your Actual Logo -->
+    <div class="logo-container">
+        <img src="images/db.png" alt="Disciple Brew" class="logo-img" style="height: 65px; width: auto; border-radius: 8px;">
+        <div>
+            <div class="logo-text">Disciple Brew</div>
+            <div class="logo-tagline">Pressed but not crushed</div>
+        </div>
+    </div>
+</a>
+                    </div>
+                    <p>The first faith-driven café in the Philippines, where every cup is brewed with purpose. Join our community of coffee lovers, dreamers, and believers.</p>
+                    
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#menu">Menu & Order</a></li>
+                        <li><a href="index.html#events">Community Events</a></li>
+                        <li><a href="index.html#location">Visit Us</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Cluster 3, Eton Centris, EDSA Corner Quezon Avenue, Quezon City</p>
+                    <p><i class="fas fa-phone"></i> +63 998 841 9852</p>
+                    <p><i class="fas fa-envelope"></i> hello@disciplebrewph.com</p>
+                    <p><i class="fas fa-clock"></i> Open Daily: 7AM-10PM (Weekdays), 8AM-11PM (Weekends)</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Disciple Brew. All rights reserved. | Designed with purpose and passion.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const successModal = document.getElementById('successModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const orderId = document.getElementById('orderId');
+        const readyTime = document.getElementById('readyTime');
+        const viewOrderDetails = document.getElementById('viewOrderDetails');
+        
+        // Payment option elements
+        const gcashOption = document.getElementById('gcashOption');
+        const paypalOption = document.getElementById('paypalOption');
+        const paymayaOption = document.getElementById('paymayaOption');
+        const creditCardOption = document.getElementById('creditCardOption');
+        const bankTransferOption = document.getElementById('bankTransferOption');
+        
+        // Payment form elements
+        const gcashForm = document.getElementById('gcashForm');
+        const paypalForm = document.getElementById('paypalForm');
+        const paymayaForm = document.getElementById('paymayaForm');
+        const creditCardForm = document.getElementById('creditCardForm');
+        const bankTransferForm = document.getElementById('bankTransferForm');
+        
+        // Order summary elements
+        const orderItems = document.getElementById('orderItems');
+        const subtotal = document.getElementById('subtotal');
+        const grandTotal = document.getElementById('grandTotal');
+        
+        // Initialize order from localStorage
+        function initOrder() {
+            const savedCart = localStorage.getItem('discipleBrewCart');
+            if (savedCart) {
+                const cart = JSON.parse(savedCart);
+                renderOrderSummary(cart);
+            } else {
+                // If no cart in localStorage, show sample data
+                renderOrderSummary([
+                    { id: 1, name: "Bangus Sinigang", price: 320, quantity: 2 },
+                    { id: 4, name: "Creamy Pasta", price: 290, quantity: 1 },
+                    { id: 7, name: "BLT Sandwich", price: 220, quantity: 1 }
+                ]);
+            }
+        }
+        
+        // Render order summary
+        function renderOrderSummary(cart) {
+            orderItems.innerHTML = '';
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">${item.quantity} × ₱${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="item-price">₱${itemTotal.toFixed(2)}</div>
+                `;
+                
+                orderItems.appendChild(orderItem);
+            });
+            
+            // Calculate totals
+            const serviceFee = 50;
+            const deliveryFee = 100;
+            const grandTotalAmount = total + serviceFee + deliveryFee;
+            
+            subtotal.textContent = `₱${total.toFixed(2)}`;
+            grandTotal.textContent = `₱${grandTotalAmount.toFixed(2)}`;
+            
+            // Save order total for payment processing
+            localStorage.setItem('discipleBrewOrderTotal', grandTotalAmount.toString());
+        }
+        
+        // Mobile Navigation Toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mainNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close mobile menu when clicking a link
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+        
+        // Payment option selection
+        function selectPaymentOption(selectedOption) {
+            // Reset all options
+            const allOptions = [gcashOption, paypalOption, paymayaOption, creditCardOption, bankTransferOption];
+            allOptions.forEach(option => {
+                option.classList.remove('selected');
+                const checkIcon = option.querySelector('.payment-check i');
+                checkIcon.classList.remove('fa-check-circle');
+                checkIcon.classList.add('fa-circle');
+                checkIcon.style.color = 'var(--text-light)';
+            });
+            
+            // Hide all forms
+            const allForms = [gcashForm, paypalForm, paymayaForm, creditCardForm, bankTransferForm];
+            allForms.forEach(form => form.style.display = 'none');
+            
+            // Select clicked option
+            selectedOption.classList.add('selected');
+            const selectedCheckIcon = selectedOption.querySelector('.payment-check i');
+            selectedCheckIcon.classList.remove('fa-circle');
+            selectedCheckIcon.classList.add('fa-check-circle');
+            selectedCheckIcon.style.color = 'var(--primary-green)';
+            
+            // Show corresponding form
+            if (selectedOption === gcashOption) {
+                gcashForm.style.display = 'block';
+            } else if (selectedOption === paypalOption) {
+                paypalForm.style.display = 'block';
+            } else if (selectedOption === paymayaOption) {
+                paymayaForm.style.display = 'block';
+            } else if (selectedOption === creditCardOption) {
+                creditCardForm.style.display = 'block';
+            } else if (selectedOption === bankTransferOption) {
+                bankTransferForm.style.display = 'block';
+            }
+        }
+        
+        // Add event listeners to payment options
+        gcashOption.addEventListener('click', () => selectPaymentOption(gcashOption));
+        paypalOption.addEventListener('click', () => selectPaymentOption(paypalOption));
+        paymayaOption.addEventListener('click', () => selectPaymentOption(paymayaOption));
+        creditCardOption.addEventListener('click', () => selectPaymentOption(creditCardOption));
+        bankTransferOption.addEventListener('click', () => selectPaymentOption(bankTransferOption));
+        
+        // Payment confirmation functions
+        function showSuccessModal(paymentMethod, amount) {
+            const methodNames = {
+                'gcash': 'GCash',
+                'paypal': 'PayPal',
+                'paymaya': 'PayMaya',
+                'creditcard': 'Credit Card',
+                'banktransfer': 'Bank Transfer'
+            };
+            
+            modalMessage.textContent = `Your ${methodNames[paymentMethod]} payment of ₱${amount} was successful! Your order has been confirmed and is being prepared.`;
+            
+            // Generate random order ID
+            const randomId = 'DB-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random() * 90000);
+            orderId.textContent = randomId;
+            
+            // Set estimated ready time
+            const now = new Date();
+            const ready = new Date(now.getTime() + 20 * 60000); // 20 minutes from now
+            const timeString = ready.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            readyTime.textContent = timeString;
+            
+            // Show modal
+            successModal.style.display = 'flex';
+            
+            // Clear cart after successful payment
+            localStorage.removeItem('discipleBrewCart');
+            localStorage.removeItem('discipleBrewOrderTotal');
+        }
+        
+        // GCash payment confirmation
+        document.getElementById('confirmGcashPayment').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const gcashNumber = document.getElementById('gcashNumber').value;
+            const gcashReference = document.getElementById('gcashReference').value;
+            
+            if (!gcashNumber || !gcashReference) {
+                alert('Please fill in all required fields for GCash payment.');
+                return;
+            }
+            
+            if (!/^09\d{9}$/.test(gcashNumber.replace(/\s/g, ''))) {
+                alert('Please enter a valid GCash number (09XXXXXXXXX).');
+                return;
+            }
+            
+            const amount = localStorage.getItem('discipleBrewOrderTotal') || '1,300';
+            showSuccessModal('gcash', amount);
+        });
+        
+        // PayPal payment confirmation
+        document.getElementById('confirmPaypalPayment').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const paypalEmail = document.getElementById('paypalEmail').value;
+            
+            if (!paypalEmail) {
+                alert('Please enter your PayPal email.');
+                return;
+            }
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            const amount = localStorage.getItem('discipleBrewOrderTotal') || '1,300';
+            showSuccessModal('paypal', amount);
+        });
+        
+        // PayMaya payment confirmation
+        document.getElementById('confirmPaymayaPayment').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const paymayaNumber = document.getElementById('paymayaNumber').value;
+            const paymayaOTP = document.getElementById('paymayaOTP').value;
+            
+            if (!paymayaNumber || !paymayaOTP) {
+                alert('Please fill in all required fields for PayMaya payment.');
+                return;
+            }
+            
+            if (!/^09\d{9}$/.test(paymayaNumber.replace(/\s/g, ''))) {
+                alert('Please enter a valid PayMaya number (09XXXXXXXXX).');
+                return;
+            }
+            
+            if (!/^\d{6}$/.test(paymayaOTP)) {
+                alert('Please enter a valid 6-digit OTP.');
+                return;
+            }
+            
+            const amount = localStorage.getItem('discipleBrewOrderTotal') || '1,300';
+            showSuccessModal('paymaya', amount);
+        });
+        
+        // Credit Card payment confirmation
+        document.getElementById('confirmCreditCardPayment').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiryDate = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            const cardName = document.getElementById('cardName').value;
+            
+            if (!cardNumber || !expiryDate || !cvv || !cardName) {
+                alert('Please fill in all required fields for credit card payment.');
+                return;
+            }
+            
+            if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
+                alert('Please enter a valid 16-digit card number.');
+                return;
+            }
+            
+            if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+                alert('Please enter expiry date in MM/YY format.');
+                return;
+            }
+            
+            if (!/^\d{3,4}$/.test(cvv)) {
+                alert('Please enter a valid CVV (3 or 4 digits).');
+                return;
+            }
+            
+            const amount = localStorage.getItem('discipleBrewOrderTotal') || '1,300';
+            showSuccessModal('creditcard', amount);
+        });
+        
+        // Bank Transfer confirmation
+        document.getElementById('confirmBankTransfer').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const bankName = document.getElementById('bankName').value;
+            const referenceNumber = document.getElementById('referenceNumber').value;
+            
+            if (!bankName || !referenceNumber) {
+                alert('Please fill in all required fields for bank transfer.');
+                return;
+            }
+            
+            const amount = localStorage.getItem('discipleBrewOrderTotal') || '1,300';
+            showSuccessModal('banktransfer', amount);
+        });
+        
+        // View order details button
+        viewOrderDetails.addEventListener('click', () => {
+            alert(`Order Details:\n\nOrder ID: ${orderId.textContent}\nReady By: ${readyTime.textContent}\n\nA confirmation email has been sent to your registered email address.`);
+        });
+        
+        // Close modal when clicking outside
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+        
+        // Scroll animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const appearOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(element => {
+            appearOnScroll.observe(element);
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+                header.style.padding = '0';
+            } else {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
+            }
+        });
+        
+        // Initialize elements with fade-in on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Trigger initial animations for elements already in view
+            fadeElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    element.classList.add('visible');
+                }
+            });
+            
+            // Initialize order from localStorage
+            initOrder();
+            
+            // Auto-select GCash by default
+            selectPaymentOption(gcashOption);
+        });
+    </script>
+</body>
+</html>
